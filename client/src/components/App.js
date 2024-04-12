@@ -1,8 +1,8 @@
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
-import { GroceryListPage } from './GroceryListPage';
-import { GroceryList } from './GroceryList';
+import { GroceryListPage } from './GroceryList/GroceryListPage';
+import { GroceryList } from './GroceryList/GroceryList';
 import { HomePage } from './HomePage';
 
 function NotFound() {

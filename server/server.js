@@ -3,31 +3,26 @@ const cors = require('cors');
 const app = express();
 const PORT = 8000;
 const CLIENT_URL = "http://localhost:3000";
-// const CLIENT_URL = "http://192.168.1.157:3000";
+const LOCAL_URL = "http://192.168.1.157:3000";
 
 
 app.use(
   cors({
     credentials: true,
-    origin: [CLIENT_URL]
+    origin: [CLIENT_URL, LOCAL_URL]
   }));
 
 app.use(express.json());
 
-// TODO: dummy data, replace with call to database
-let lists = [
-  {id: 0, name: "Roche Bros"},
-  {id: 1, name: "Target"}
-];
+const groceryListController = require("./controller/groceryList")
+// const itemController = require("./controller/item")
+// const recipeController = require("./controller/recipe")
+// const plannedMealController = require("./controller/plannedMeal")
 
-app.get('/grocery_list/get_lists', (req, res) => {
-  res.send(lists);
-});
-
-app.post('/grocery_list/add_list', (req, res) => {
-  lists.push({id: lists.length, name: req.body.name});
-  res.send(lists);
-});
+app.use("/grocery_list", groceryListController);
+// app.use("/item", itemController);
+// app.use("/recipe", recipeController);
+// app.use("/planned_meal", plannedMealsController);
 
 // Start the server
 app.listen(PORT, () => {
