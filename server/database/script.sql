@@ -158,6 +158,52 @@ DELIMITER ;
 # Update
 # Delete
 
+DROP PROCEDURE IF EXISTS GetAllItems;
+
+DELIMITER $$
+CREATE PROCEDURE GetAllItems()
+BEGIN
+  SELECT * FROM item;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS UpdateItem;
+DELIMITER $$
+CREATE PROCEDURE UpdateItem (
+	IN p_id INT,
+	IN p_name VARCHAR(255)
+)
+BEGIN
+  UPDATE item
+  SET name = p_name
+  WHERE id = p_id;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS DeleteItem;
+DELIMITER $$
+CREATE PROCEDURE DeleteItem (
+	IN p_id INT
+)
+BEGIN
+	DELETE FROM item
+	WHERE id = p_id;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS CreateItem;
+DELIMITER $$
+CREATE PROCEDURE CreateItem (
+	IN p_name VARCHAR(255),
+	IN p_category ENUM('Produce', 'Dairy', 'Meat', 'Baking', 'Other', 'Non-food')
+)
+BEGIN
+  INSERT INTO item (name, category) VALUES (p_name, p_category);
+END$$
+DELIMITER ;
+
+
+
 ## Grocery List
 
 # CRUD
@@ -327,3 +373,25 @@ INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
 VALUES (2, 4, 1.5, "cups");
 
 CALL GetGroceryListItems(1); 
+
+
+# procedure - add recipe to grocery list
+# input - recipe id, grocery list id
+# actions 
+#  - get all rows in recipe_made_up_of_item where recipe = input recipe id
+
+
+# procedure - add new item
+
+# function - get all planned meals
+
+# procedure - change planned meal
+
+# procedure - edit recipe
+
+# procedure - edit item
+
+# function - get all items in grocery list
+
+
+
