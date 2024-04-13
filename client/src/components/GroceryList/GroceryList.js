@@ -56,7 +56,7 @@ const GroceryList = () => {
     return (
         <div>
             <h1>Grocery List</h1>
-            <Button onClick={() => setOpenNew(true)}>Add item</Button>
+            <Button onClick={() => setOpenNew(true)}>Add Item</Button>
             {categories.map((c, idx) => (
                 <div key={idx}>
                     <h2>{c}</h2>

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
 import { GroceryListPage } from './GroceryList/GroceryListPage';
 import { GroceryList } from './GroceryList/GroceryList';
 import { HomePage } from './HomePage';
+import { ItemsPage } from './Items/ItemsPage';
 
 function NotFound() {
   return <>Error 404: Page not found!</>;
@@ -22,8 +23,8 @@ return (
         <Container maxWidth="sm">
           <Routes>
             <Route path="/" exact element={<HomePage />} />
-            {/* <Route path="/recipes" element={<Recipes />} />
-            <Route path="/items" element={<Items />} /> */}
+            {/* <Route path="/recipes" element={<Recipes />} /> */}
+            <Route path="/items" element={<ItemsPage />} />
             <Route path="/grocery_lists" element={<GroceryListPage />} />
             <Route path="/grocery_lists/:id" element={<GroceryList />} />
             <Route path="*" element={<NotFound />} />

@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
     const [rows] = await connection.execute('CALL GetAllGroceryLists()');
     res.json(rows[0]);
   } catch (err) {
-    console.err(err);
+    console.error(err);
     res.status(500).json({error: "Error getting grocery lists"});
   }
 });
