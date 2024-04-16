@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { Navigate, redirect, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { addItemToRecipe, deleteItemInRecipe, editItemInRecipe, getItemsInRecipe, getRecipe, editRecipe, deleteRecipe } from "../../services/recipesService";
 import { Button, Dialog, DialogContent, DialogContentText, TextField, DialogActions, DialogTitle, IconButton } from "@mui/material";
-// import { Textarea } from '@mui/base/TextareaAutosize';
-// import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {AddItemDialog} from "../util/AddItemDialog";
 import { DeleteDialog } from "../util/DeleteDialog";

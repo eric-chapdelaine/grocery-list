@@ -103,12 +103,13 @@ DROP PROCEDURE IF EXISTS GetAllPlannedMeals;
 DELIMITER $$
 CREATE PROCEDURE GetAllPlannedMeals()
 BEGIN
-  -- TODO: maybe include recipe name
-  SELECT id, `date`, meal_type, recipe 
-  FROM planned_meal;
+  SELECT pm.id, `date`, meal_type, pm.recipe as recipe_id, name  
+  FROM planned_meal pm
+  	JOIN recipe r
+  	ON pm.recipe = r.id
+  ORDER BY `date`;
 END$$
 DELIMITER ;
-
 
 # Update
 DROP PROCEDURE IF EXISTS UpdatePlannedMeal;
@@ -140,23 +141,6 @@ BEGIN
 	WHERE id = p_id;
 END$$
 DELIMITER ;
-
-
-## Recipe
-
-# CRUD
-# Create
-# Read
-# Update
-# Delete
-
-## Item
-
-# CRUD
-# Create
-# Read
-# Update
-# Delete
 
 DROP PROCEDURE IF EXISTS GetAllItems;
 
@@ -322,6 +306,21 @@ BEGIN
 END$$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS AddRecipeToGroceryList;
+
+DELIMITER $$
+CREATE PROCEDURE AddRecipeToGroceryList(
+  IN p_grocery_list INT,
+  IN p_recipe_id INT
+)
+BEGIN
+  INSERT INTO grocery_list_includes_item (grocery_list, item, picked_up, quantity, unit, recipe)
+  SELECT p_grocery_list, item, 0, quantity, unit, p_recipe_id
+  FROM recipe_made_up_of_item
+  WHERE recipe = p_recipe_id;
+END$$
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS GetRecipes;
 
 DELIMITER $$
@@ -438,10 +437,6 @@ END$$
 DELIMITER ;
 
 
-
-
-
-
 ## Sample Data ##
 
 INSERT INTO grocery_list (name) VALUES ("Roche Bros");
@@ -492,27 +487,4 @@ VALUES (2, 5, 1, "lb");
 
 INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
 VALUES (2, 4, 1.5, "cups");
-
-CALL GetGroceryListItems(1); 
-
-
-# procedure - add recipe to grocery list
-# input - recipe id, grocery list id
-# actions 
-#  - get all rows in recipe_made_up_of_item where recipe = input recipe id
-
-
-# procedure - add new item
-
-# function - get all planned meals
-
-# procedure - change planned meal
-
-# procedure - edit recipe
-
-# procedure - edit item
-
-# function - get all items in grocery list
-
-
 

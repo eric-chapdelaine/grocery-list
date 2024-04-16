@@ -52,4 +52,12 @@ const setPickedUp = async (id, picked_up) => {
     return res.data
 }
 
-export {getGroceryLists, addGrocerylist, updateGroceryList, deleteGroceryList, getItemsFromList, addItemToList, deleteItemFromList, setPickedUp};
+const addRecipeToGroceryList = async (id, r_id) => {
+    let data = {
+        r_id: r_id
+    }
+    const res = await api.post(`${GROCERY_LIST_API_URL}/${id}/recipe`, data);
+    return res.data;
+}
+
+export {getGroceryLists, addGrocerylist, updateGroceryList, deleteGroceryList, getItemsFromList, addItemToList, deleteItemFromList, setPickedUp, addRecipeToGroceryList};

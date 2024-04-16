@@ -28,7 +28,6 @@ const GroceryListPage = () => {
     }
 
     useEffect(() => {
-        // TODO: maybe some some popup if refreshData fails
         refreshData().catch((e) => alert(e));
     }, []);
 

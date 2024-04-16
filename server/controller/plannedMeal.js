@@ -1,20 +1,52 @@
 const express = require("express");
+const connection = require("../utils")
 
 const router = express.Router();
 
-// TODO: dummy data, replace with call to database
-let lists = [
-  {id: 0, name: "Roche Bros"},
-  {id: 1, name: "Target"}
-];
+router.get('/', async (req, res) => {
+  try {
+    const [rows] = await connection.execute('CALL GetAllPlannedMeals()');
+    res.json(rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: "Error getting planned meals"});
+  }
+})
 
-router.get('/get_lists', (req, res) => {
-  res.send(lists);
-});
+router.post('/', async (req, res) => {
+  try {
+    const {date, meal_type, recipe_id} = req.body;
+    const mysqlDate = new Date(date).toISOString().slice(0, 10);
+    await connection.execute('CALL CreatePlannedMeal(?, ?, ?)', [mysqlDate, meal_type, recipe_id]);
+    res.json({status: "Success"});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: "Error creating a new planned meal"});
+  }
+})
 
-router.post('/add_list', (req, res) => {
-  lists.push({id: lists.length, name: req.body.name});
-  res.send(lists);
-});
+router.put('/:id', async (req, res) => {
+  try {
+    const {id} = req.params;
+    const {date, meal_type, recipe_id} = req.body;
+    const mysqlDate = new Date(date).toISOString().slice(0, 10);
+    await connection.execute('CALL UpdatePlannedMeal(?, ?, ?, ?)', [id, mysqlDate, meal_type, recipe_id]);
+    res.json({status: "Success"});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: "Error updating planned meal"});
+  }
+})
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const {id} = req.params;
+    await connection.execute('CALL DeletePlannedMeal(?)', [id]);
+    res.json({status: "Success"});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: "Error deleting planned meal"});
+  }
+})
 
 module.exports = router;

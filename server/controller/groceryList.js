@@ -106,12 +106,23 @@ router.post('/item/:id', async (req, res) => {
     const {id} = req.params;
     const {picked_up} = req.body;
     await connection.execute('CALL UpdateItemPickedUp(?, ?)', [id, picked_up]);
-    res.json({stats: "Success"});
+    res.json({status: "Success"});
   } catch (err) {
     console.error(err);
     res.status(500).json({error: "Error picking up item"});
   }
 })
 
+router.post('/:id/recipe', async (req, res) => {
+  try {
+    const {id} = req.params;
+    const {r_id} = req.body;
+    await connection.execute('CALL AddRecipeToGroceryList(?, ?)', [id, r_id]);
+    res.json({status: "Success"});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: "Error adding the recipe to the grocery list"});
+  }
+})
 
 module.exports = router;
