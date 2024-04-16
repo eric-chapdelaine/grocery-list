@@ -1,14 +1,9 @@
 const express = require("express");
-const mysql = require('mysql2/promise');
+
+const connection = require("../utils");
 
 const router = express.Router();
 
-const connection = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'password',
-  database: 'grocery'
-})
 
 // read
 router.get('/', async (req, res) => {

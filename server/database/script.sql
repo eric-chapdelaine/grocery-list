@@ -307,6 +307,8 @@ BEGIN
 END$$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS UpdateItemPickedUp;
+
 DELIMITER $$
 CREATE PROCEDURE UpdateItemPickedUp(
 	IN p_id INT,
@@ -319,6 +321,125 @@ BEGIN
 
 END$$
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS GetRecipes;
+
+DELIMITER $$
+CREATE PROCEDURE GetRecipes()
+BEGIN
+	SELECT * FROM recipe;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE GetRecipe(
+	IN p_id INT
+)
+BEGIN
+	SELECT * FROM recipe WHERE id = p_id;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS GetItemsInRecipe;
+
+DELIMITER $$
+CREATE PROCEDURE GetItemsInRecipe(
+	IN p_id INT
+)
+BEGIN
+	SELECT r.id as recipe_id, i.id as item_id, quantity, unit, i.name 
+	FROM recipe_made_up_of_item rmuoi
+		LEFT JOIN recipe r 
+			ON r.id = rmuoi.recipe
+		LEFT JOIN item i
+			ON i.id = rmuoi.item
+	WHERE r.id = p_id;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS UpdateItemInRecipe;
+
+DELIMITER $$
+CREATE PROCEDURE UpdateItemInRecipe(
+	IN p_recipe_id INT,
+	IN p_item_id INT,
+	IN p_new_quantity DOUBLE,
+	IN p_new_unit VARCHAR(255)
+)
+BEGIN
+	UPDATE recipe_made_up_of_item  
+	SET quantity = p_new_quantity,
+		unit = p_new_unit
+	WHERE recipe = p_recipe_id AND
+		  item = p_item_id;
+END$$
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS AddItemToRecipe;
+DELIMITER $$
+CREATE PROCEDURE AddItemToRecipe(
+	IN p_recipe_id INT,
+	IN p_item_id INT,
+	IN p_quantity DOUBLE,
+	IN p_unit VARCHAR(255)
+)
+BEGIN
+	INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
+	VALUES (p_recipe_id, p_item_id, p_quantity, p_unit);
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS DeleteItemFromRecipe;
+DELIMITER $$
+CREATE PROCEDURE DeleteItemFromRecipe(
+	IN p_recipe_id INT,
+	IN p_item_id INT
+)
+BEGIN
+	DELETE FROM recipe_made_up_of_item
+	WHERE recipe = p_recipe_id AND
+		  item = p_item_id;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS UpdateRecipe;
+
+DELIMITER $$
+CREATE PROCEDURE UpdateRecipe(
+	IN p_id INT,
+	IN p_name VARCHAR(255),
+	IN p_prep_time INT,
+	IN p_cook_time INT,
+	IN p_servings INT,
+	IN p_instructions TEXT
+)
+BEGIN
+	UPDATE recipe
+	SET name = p_name,
+		prep_time_minutes = p_prep_time,
+		cook_time_minutes = p_cook_time,
+		servings = p_servings,
+		instructions = p_instructions
+	WHERE id = p_id;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS DeleteRecipe;
+
+DELIMITER $$
+CREATE PROCEDURE DeleteRecipe(
+	IN p_id INT
+)
+BEGIN
+	DELETE FROM recipe
+	WHERE id = p_id;
+END$$
+DELIMITER ;
+
+
+
+
 
 
 ## Sample Data ##

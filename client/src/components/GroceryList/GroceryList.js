@@ -10,7 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete'
 import { DeleteDialog } from '../util/DeleteDialog';
-import { NewListItemDialog } from './NewListItemDialog';
+import { AddItemDialog } from '../util/AddItemDialog';
 import { addItemToList } from '../../services/groceryListsService';
 
 const ListItems = ({items, setOpenDelete, setActiveItem, refreshData}) => {
@@ -67,7 +67,8 @@ const GroceryList = () => {
                         refreshData={refreshData}/>
                 </div>
             ))}
-        <NewListItemDialog 
+        <AddItemDialog
+        title="Add a new item to the list"
         open={openNew}
         onClose={() => setOpenNew(false)}
         onSubmit={async (item_id, quantity, unit) => {

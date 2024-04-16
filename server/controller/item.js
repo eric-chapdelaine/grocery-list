@@ -1,18 +1,11 @@
 const express = require("express");
-const mysql = require('mysql2/promise')
+const connection = require("../utils");
 
 const router = express.Router();
 
-const connection = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'password',
-  database: 'grocery'
-})
-
 router.get('/', async (req, res) => {
   try {
-    const [rows] = await connection.execute('CALL GetAllItems()')
+    const [rows] = await connection.execute('CALL GetAllItems()');
     res.json(rows[0]);
   } catch (err) {
     console.error(err);

@@ -5,8 +5,23 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { Autocomplete } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { getItems } from '../../services/itemsService';
 
-const NewListItemDialog = ({open, onClose, onSubmit}) => {
+const AddItemDialog = ({title, open, onClose, onSubmit}) => {
+
+    const [itemId, setItemId] = useState(null);
+    const [items, setItems] = useState([]); 
+
+    useEffect(() => {
+        const getData = async () => {
+            setItems(await getItems());
+        };
+
+         getData();
+
+    }, []);
 
     return (
     <Dialog 
@@ -18,25 +33,27 @@ const NewListItemDialog = ({open, onClose, onSubmit}) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
                 const formJson = Object.fromEntries(formData.entries());
-                onSubmit(formJson.item, formJson.quantity, formJson.unit);
+                onSubmit(itemId, formJson.quantity, formJson.unit);
                 onClose();
             }
         }}
         >
-        <DialogTitle>Add Item to List</DialogTitle>
+        <DialogTitle>{title}</DialogTitle>
         <DialogContent>
             <DialogContentText>
                 Please enter the name of the item you want to add
-                {/* TODO: change to drop down of items */}
             </DialogContentText>
-            <TextField
-                autoFocus
+            <Autocomplete 
                 required
-                id="item"
-                name="item"
-                label="Item"
-                type="number"
-                fullWidth />
+                renderInput={(params) => <TextField {... params} 
+                                            required={true}
+                                            id="item" 
+                                            name="item" 
+                                            label="Item" />}
+                onChange={(event, newValue) => setItemId(newValue.id)}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+                getOptionLabel={(option) => option.name}
+                options={items}/>
             <DialogContentText>
                 Enter the quantity of the item
             </DialogContentText>
@@ -47,6 +64,7 @@ const NewListItemDialog = ({open, onClose, onSubmit}) => {
                 name="quantity"
                 label="Quantity"
                 type="number"
+                step="any"
                 fullWidth />
             <DialogContentText>
                 Enter the unit of the item
@@ -68,4 +86,4 @@ const NewListItemDialog = ({open, onClose, onSubmit}) => {
     );
 }
 
-export {NewListItemDialog};
+export {AddItemDialog};

@@ -5,6 +5,8 @@ import { GroceryListPage } from './GroceryList/GroceryListPage';
 import { GroceryList } from './GroceryList/GroceryList';
 import { HomePage } from './HomePage';
 import { ItemsPage } from './Items/ItemsPage';
+import { RecipesPage } from './Recipes/RecipesPage';
+import { Recipe } from './Recipes/Recipe';
 
 function NotFound() {
   return <>Error 404: Page not found!</>;
@@ -23,10 +25,11 @@ return (
         <Container maxWidth="sm">
           <Routes>
             <Route path="/" exact element={<HomePage />} />
-            {/* <Route path="/recipes" element={<Recipes />} /> */}
             <Route path="/items" element={<ItemsPage />} />
             <Route path="/grocery_lists" element={<GroceryListPage />} />
             <Route path="/grocery_lists/:id" element={<GroceryList />} />
+            <Route path="/recipes" element={<RecipesPage />} />
+            <Route path="/recipes/:id" element={<Recipe />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Container>
