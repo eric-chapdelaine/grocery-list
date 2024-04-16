@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
-import { getRecipes } from "../../services/recipesService";
-import { CardActions, CardContent, ListItem, ListItemText } from "@mui/material";
+import { getRecipes, createNewRecipe } from "../../services/recipesService";
+import { CardActions, CardContent } from "@mui/material";
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { Link } from "react-router-dom";
 import { ErrorAlert } from "../util/ErrorAlert";
+import { NewRecipeDialog } from "./NewRecipeDialog";
 
 const RecipeCard = ({recipe}) => {
     return (
@@ -37,6 +38,7 @@ const RecipeCard = ({recipe}) => {
 
 const RecipesPage = () => {
     const [recipes, setRecipes] = useState([]);
+    const [openNew, setOpenNew] = useState(false);
     const [error, setError] = useState(null);
 
     const refreshData = async () => {
@@ -51,11 +53,19 @@ const RecipesPage = () => {
     return (
         <>
         <ErrorAlert error={error}/>
+        <Button onClick={() => {setOpenNew(true)}}>Create New Recipe</Button>
         <Stack spacing={2}>
         {recipes.map((r, idx) => (
             <RecipeCard key={idx} recipe={r} />
         ))}
         </Stack>
+        <NewRecipeDialog
+            open={openNew}
+            onClose={() => setOpenNew(false)}
+            onSubmit={async (name, instructions, prep_time, cook_time, servings) => {
+                await createNewRecipe(name, instructions, prep_time, cook_time, servings).catch(setError);
+                refreshData();
+            }}/>
         </>
     )
 }

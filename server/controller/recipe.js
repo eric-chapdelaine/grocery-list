@@ -39,6 +39,17 @@ router.get('/:id/items', async (req, res) => {
   }
 })
 
+router.post('/', async (req, res) => {
+  try {
+    const {name, instructions, prep_time, cook_time, servings} = req.body;
+    await connection.execute('CALL CreateRecipe(?, ?, ?, ?, ?)', [name, instructions, prep_time, cook_time, servings]);
+    res.json({status: "Success"});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: "Error creating a new recipe"});
+  }
+})
+
 router.put('/:r_id/items/:i_id/', async (req, res) => {
   try {
     const {r_id, i_id} = req.params;

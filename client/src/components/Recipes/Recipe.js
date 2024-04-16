@@ -6,87 +6,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {AddItemDialog} from "../util/AddItemDialog";
 import { DeleteDialog } from "../util/DeleteDialog";
 import { ErrorAlert } from "../util/ErrorAlert";
+import { NewRecipeDialog } from "./NewRecipeDialog";
 
-const EditRecipeDialog = ({recipe, open, onClose, onSubmit}) => {
-    return (
-        <Dialog
-        open={open}
-        onClose={onClose}
-        PaperProps={{
-            component: 'form',
-            onSubmit: async (e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const formJson = Object.fromEntries(formData.entries());
-                onSubmit(recipe.id, formJson.name, formJson.prep_time_minutes, formJson.cook_time_minutes, formJson.servings, formJson.instructions);
-                onClose();
-            }
-        }}>
-        <DialogTitle>Edit recipe</DialogTitle>
-        <DialogContent>
-            <DialogContentText>Enter the new name:</DialogContentText>
-            <TextField 
-                autoFocus
-                required
-                id="name"
-                name="name"
-                label="Name"
-                type="text"
-                placeholder={recipe.name}
-                fullWidth/>
-            <DialogContentText>Enter the new prep time (in minutes):</DialogContentText>
-            <TextField 
-                autoFocus
-                required
-                id="prep_time_minutes"
-                name="prep_time_minutes"
-                label="Prep time"
-                type="number"
-                step="any"
-                placeholder={recipe.prep_time_minutes}
-                fullWidth/>
-            <DialogContentText>Enter the new cook time (in minutes):</DialogContentText>
-            <TextField 
-                autoFocus
-                required
-                id="cook_time_minutes"
-                name="cook_time_minutes"
-                label="Cook time"
-                type="number"
-                step="any"
-                placeholder={recipe.cook_time_minutes}
-                fullWidth/>
-            <DialogContentText>Enter the number of servings:</DialogContentText>
-            <TextField 
-                autoFocus
-                required
-                id="servings"
-                name="servings"
-                label="Servings"
-                type="number"
-                step="1"
-                placeholder={recipe.servings}
-                fullWidth/>
-            <DialogContentText>Enter the instructions:</DialogContentText>
-            <TextField
-                multiline
-                autoFocus
-                required
-                id="instructions"
-                name="instructions"
-                label="Instructions"
-                type="text"
-                placeholder={recipe.instructions}
-                fullWidth/>
-        </DialogContent>
-        <DialogActions>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button type="submit">Edit</Button>
-        </DialogActions>
-
-        </Dialog>
-    )
-}
 
 const EditItemDialog = ({open, onClose, onSubmit}) => {
     return (
@@ -238,12 +159,13 @@ const Recipe = () => {
             }}/>
 
         {/* Recipe Dialogs */}
-        <EditRecipeDialog 
+        <NewRecipeDialog
+            title="Edit recipe"
             recipe={recipe}
             open={openEditRecipe}
             onClose={() => setOpenEditRecipe(false)}
-            onSubmit={async (id, name, prep_time, cook_time, servings, instructions) => {
-                await editRecipe(id, name, prep_time, cook_time, servings, instructions).catch(setError);
+            onSubmit={async (name, prep_time, cook_time, servings, instructions) => {
+                await editRecipe(recipe.id, name, prep_time, cook_time, servings, instructions).catch(setError);
                 refreshData();
             }}/>
         <DeleteDialog 

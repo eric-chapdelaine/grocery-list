@@ -12,6 +12,19 @@ const getRecipe = async (id) => {
     return res.data[0];
 }
 
+const createNewRecipe = async (name, instructions, prep_time, cook_time, servings) => {
+    let data = {
+        name: name,
+        instructions: instructions,
+        prep_time: prep_time,
+        cook_time: cook_time,
+        servings: servings
+    }
+
+    const res = await api.post(`${RECIPES_API_URL}/`, data);
+    return res.data;
+}
+
 const getItemsInRecipe = async (id) => {
     const res = await api.get(`${RECIPES_API_URL}/${id}/items`);
     return res.data;
@@ -60,4 +73,4 @@ const deleteRecipe = async (id) => {
 }
 
 
-export {getRecipes, getRecipe, getItemsInRecipe, editItemInRecipe, addItemToRecipe, deleteItemInRecipe, editRecipe, deleteRecipe};
+export {getRecipes, getRecipe, createNewRecipe, getItemsInRecipe, editItemInRecipe, addItemToRecipe, deleteItemInRecipe, editRecipe, deleteRecipe};

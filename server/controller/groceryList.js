@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
     await connection.execute('CALL CreateGroceryList(?)', [name]);
     res.json({status: "Success"});
   } catch (err) {
-    console.err(err);
+    console.error(err);
     res.status(500).json({error: "Error creating grocery list"});
   }
 });
