@@ -93,6 +93,8 @@ const Recipe = () => {
     return (
         <>
         <ErrorAlert error={error} />
+        {recipe &&
+        <>
         <h1>
         {recipe.name}
         <Button onClick={() => setOpenEditRecipe(true)}>Edit</Button>
@@ -177,6 +179,8 @@ const Recipe = () => {
                 refreshData();
                 navigate("/recipes");
             }}/>
+            </>
+        }
 
         </>
     )
