@@ -339,6 +339,34 @@ BEGIN
 END$$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS CreateRecipe;
+
+DELIMITER $$
+CREATE PROCEDURE CreateRecipe(
+    IN p_name VARCHAR(255),
+    IN p_instructions TEXT,
+    IN p_prep_time_minutes INT,
+    IN p_cook_time_minutes INT,
+    IN p_servings INT
+)
+BEGIN
+    INSERT INTO recipe (
+        name,
+        instructions,
+        prep_time_minutes,
+        cook_time_minutes,
+        servings
+    )
+    VALUES (
+        p_name,
+        p_instructions,
+        p_prep_time_minutes,
+        p_cook_time_minutes,
+        p_servings
+    );
+END$$
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS GetItemsInRecipe;
 
 DELIMITER $$
