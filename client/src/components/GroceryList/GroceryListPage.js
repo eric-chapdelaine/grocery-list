@@ -6,12 +6,11 @@ import Stack from '@mui/material/Stack';
 import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
-
 import {Link} from 'react-router-dom';
 import { NewListDialog } from "./NewListDialog";
 import { DeleteDialog } from "../util/DeleteDialog";
 import { UpdateListDialog } from "./UpdateListDialog";
-// import { GroceryList } from "./GroceryList";
+import { ErrorAlert } from "../util/ErrorAlert";
 
 const GroceryListPage = () => {
     const [lists, setLists] = useState([]);
@@ -20,19 +19,21 @@ const GroceryListPage = () => {
     const [openNew, setOpenNew] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [openUpdate, setOpenUpdate] = useState(false);
+    const [error, setError] = useState(null);
 
 
     const refreshData = async () => {
-        let res = await getGroceryLists();
+        let res = await getGroceryLists().catch(setError);
         setLists(res || []);
     }
 
     useEffect(() => {
-        refreshData().catch((e) => alert(e));
+        refreshData();
     }, []);
 
     return (
     <div>
+    <ErrorAlert error={error} />
     Select a Grocery List: <Button onClick={() => setOpenNew(true)}>Add New</Button>
     <Stack direction="column" spacing={2}>
         {lists.map((l, idx) =>(
@@ -57,7 +58,7 @@ const GroceryListPage = () => {
         open={openNew}
         onClose={() => setOpenNew(false)}
         onSubmit={async (name) => {
-            await addGrocerylist(name);
+            await addGrocerylist(name).catch(setError);
             refreshData();
         }}/>
 
@@ -65,13 +66,13 @@ const GroceryListPage = () => {
                 getName={() => activeList !== null ? activeList.name : ""}
                 open={openDelete} 
                 onClose={() => {setOpenDelete(false)}}
-                onSubmit={async () => {await deleteGroceryList(activeList.id); refreshData()}}/>
+                onSubmit={async () => {await deleteGroceryList(activeList.id).catch(setError); refreshData()}}/>
     <UpdateListDialog
                 getName={() => activeList !== null ? activeList.name : ""}
                 open={openUpdate}
                 onClose={() => {setOpenUpdate(false)}}
                 onSubmit={async (name) => {
-                    await updateGroceryList(activeList.id, name);
+                    await updateGroceryList(activeList.id, name).catch(setError);
                     refreshData();
                 }} />
 

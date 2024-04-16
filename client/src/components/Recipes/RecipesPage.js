@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { Link } from "react-router-dom";
+import { ErrorAlert } from "../util/ErrorAlert";
 
 const RecipeCard = ({recipe}) => {
     return (
@@ -36,17 +37,20 @@ const RecipeCard = ({recipe}) => {
 
 const RecipesPage = () => {
     const [recipes, setRecipes] = useState([]);
+    const [error, setError] = useState(null);
 
     const refreshData = async () => {
-        let res = await getRecipes();
+        let res = await getRecipes().catch(setError);
         setRecipes(res || []);
     };
 
     useEffect(() => {
-        refreshData().catch((e) => alert(e));
+        setError(null);
+        refreshData();
     }, []);
     return (
         <>
+        <ErrorAlert error={error}/>
         <Stack spacing={2}>
         {recipes.map((r, idx) => (
             <RecipeCard key={idx} recipe={r} />

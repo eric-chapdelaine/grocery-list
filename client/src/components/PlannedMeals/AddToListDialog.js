@@ -5,11 +5,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { MenuItem, Select, Autocomplete } from '@mui/material';
+import { Autocomplete } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { getGroceryLists } from '../../services/groceryListsService';
 
-const AddToListDialog = ({open, onClose, onSubmit}) => {
+const AddToListDialog = ({open, onClose, onSubmit, setError}) => {
 
     const [lists, setLists] = useState([]);
     const [list, setList] = useState(null);
@@ -19,7 +19,7 @@ const AddToListDialog = ({open, onClose, onSubmit}) => {
             setLists(await getGroceryLists());
         }
 
-        getData();
+        getData().catch(setError);
     }, []);
 
     return (

@@ -9,6 +9,7 @@ import { EditItemDialog } from "./EditItemDialog";
 import { editItemName, deleteItem, addItem } from "../../services/itemsService";
 import { DeleteDialog } from "../util/DeleteDialog";
 import { NewItemDialog } from "./NewItemDialog";
+import { ErrorAlert } from "../util/ErrorAlert";
 
 const ListItems = ({items, setOpenDelete, setActiveItem, setOpenEdit}) => {
 
@@ -28,18 +29,21 @@ const ItemsPage = () => {
     const [openDelete, setOpenDelete] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [activeItem, setActiveItem] = useState(null);
+    const [error, setError] = useState(null);
 
     const refreshData = async () => {
-        let res = await getItems();
+        let res = await getItems().catch(setError);
         setItems(res || []);
     }
 
     useEffect(() => {
-        refreshData().catch((e) => alert(e));        
+        setError(null);
+        refreshData();        
     }, []);
 
     return (
         <div>
+            <ErrorAlert error={error}/>
             <h1>Items</h1>
             <Button onClick={() => setOpenNew(true)}>Add Item</Button>
 
@@ -59,7 +63,7 @@ const ItemsPage = () => {
                 open={openNew}
                 onClose={() => setOpenNew(false)}
                 onSubmit={async (name, category) => {
-                    await addItem(name, category);
+                    await addItem(name, category).catch(setError);
                     refreshData();
                 }}/>
             <EditItemDialog 
@@ -67,7 +71,7 @@ const ItemsPage = () => {
                 open={openEdit}
                 onClose={() => setOpenEdit(false)}
                 onSubmit={async (name) => {
-                    await editItemName(activeItem.id, name);
+                    await editItemName(activeItem.id, name).catch(setError);
                     refreshData();
                 }}/>
             <DeleteDialog 
@@ -75,7 +79,7 @@ const ItemsPage = () => {
                 open={openDelete}
                 onClose={() => setOpenDelete(false)}
                 onSubmit={async () => {
-                    await deleteItem(activeItem.id);
+                    await deleteItem(activeItem.id).catch(setError);
                     refreshData();
                 }}/>
         </div>

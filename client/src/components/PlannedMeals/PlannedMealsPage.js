@@ -8,6 +8,7 @@ import { DeleteDialog } from "../util/DeleteDialog";
 import { addRecipeToGroceryList } from "../../services/groceryListsService";
 import { NewPlanDialog } from "./NewPlanDialog";
 import { AddToListDialog } from "./AddToListDialog";
+import { ErrorAlert } from "../util/ErrorAlert";
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -46,17 +47,21 @@ const PlannedMealsPage = () => {
     const [openNew, setOpenNew] = useState(false);
     const [openAdd, setOpenAdd] = useState(false);
 
+    const [error, setError] = useState(null);
+
     const refreshData = async () => {
-        let res = await getPlannedMeals();
+        let res = await getPlannedMeals().catch(setError);
         setMeals(res || []);
     }
 
     useEffect(() => {
-        refreshData().catch((e) => alert(e));
+        refreshData();
     }, []);
 
     return (
         <>
+        <ErrorAlert error={error}/>
+
         <h1>Meal Plans</h1>
         <Button onClick={() => setOpenNew(true)}>New Meal Plan</Button>
         <List sx={{width: "100%"}}>
@@ -76,10 +81,11 @@ const PlannedMealsPage = () => {
             open={openDelete}
             onClose={() => setOpenDelete(false)}
             onSubmit={async () => {
-                await deletePlannedMeal(activeMeal.id);
+                await deletePlannedMeal(activeMeal.id).catch(setError);
                 refreshData();
             }}/>
         <NewPlanDialog
+            setError={setError}
             title={"Edit meal plan"}
             open={openEdit}
             onClose={() => setOpenEdit(false)}
@@ -88,19 +94,21 @@ const PlannedMealsPage = () => {
                 refreshData();
             }}/>
         <NewPlanDialog
+            setError={setError}
             title={"Create a new meal plan"}
             open={openNew}
             onClose={() => setOpenNew(false)}
             onSubmit={async (date, meal_type, recipe_id) => {
-                await createPlannedMeal(date, meal_type, recipe_id);
+                await createPlannedMeal(date, meal_type, recipe_id).catch(setError);
                 refreshData();
             }}/>
         <AddToListDialog
+            setError={setError}
             open={openAdd}
             onClose={() => setOpenAdd(false)}
             meal={activeMeal}
             onSubmit={async (list_id) => {
-                await addRecipeToGroceryList(list_id, activeMeal.recipe_id);
+                await addRecipeToGroceryList(list_id, activeMeal.recipe_id).catch(setError);
                 refreshData();
             }}/>
         </>

@@ -5,6 +5,7 @@ import { Button, Dialog, DialogContent, DialogContentText, TextField, DialogActi
 import DeleteIcon from '@mui/icons-material/Delete';
 import {AddItemDialog} from "../util/AddItemDialog";
 import { DeleteDialog } from "../util/DeleteDialog";
+import { ErrorAlert } from "../util/ErrorAlert";
 
 const EditRecipeDialog = ({recipe, open, onClose, onSubmit}) => {
     return (
@@ -155,12 +156,8 @@ const Recipe = () => {
     const navigate = useNavigate();
 
     const refreshData = async () => {
-        try {
-            setRecipe(await getRecipe(id));
-            setItems(await getItemsInRecipe(id));
-        } catch (err) {
-            setError(err ? err.message : "Unknown error occurred");
-        }
+        setRecipe(await getRecipe(id).catch(setError));
+        setItems(await getItemsInRecipe(id).catch(setError));
     }
 
     useEffect(() => {
@@ -171,12 +168,12 @@ const Recipe = () => {
     }, []);
 
     if (loading) return (<>Loading...</>);
-    if (error) return (<>Error: {error}</>);
 
     return (
         <>
+        <ErrorAlert error={error} />
         <h1>
-            {recipe.name}
+        {recipe.name}
         <Button onClick={() => setOpenEditRecipe(true)}>Edit</Button>
 
         <IconButton onClick={() => setOpenDeleteRecipe(true)}>
@@ -215,11 +212,12 @@ const Recipe = () => {
         {recipe.instructions}
         {/* Item Dialogs */}
         <AddItemDialog
+        setError={setError}
         title="Add a new item to the recipe"
         open={openNewItem}
         onClose={() => setOpenNewItem(false)}
         onSubmit={async (item_id, quantity, unit) => {
-            await addItemToRecipe(id, item_id, quantity, unit);
+            await addItemToRecipe(id, item_id, quantity, unit).catch(setError);
             refreshData();
         }} />
         <EditItemDialog 
@@ -227,7 +225,7 @@ const Recipe = () => {
             open={openEditItem}
             onClose={() => setOpenEditItem(false)}
             onSubmit={async (quantity, unit) => {
-                await editItemInRecipe(id, activeItem.item_id, quantity, unit);
+                await editItemInRecipe(id, activeItem.item_id, quantity, unit).catch(setError);
                 refreshData();
             }}/>
         <DeleteDialog 
@@ -235,7 +233,7 @@ const Recipe = () => {
             open={openDeleteItem}
             onClose={() => setOpenDeleteItem(false)}
             onSubmit={async () => {
-                await deleteItemInRecipe(id, activeItem.item_id);
+                await deleteItemInRecipe(id, activeItem.item_id).catch(setError);
                 refreshData();
             }}/>
 
@@ -245,7 +243,7 @@ const Recipe = () => {
             open={openEditRecipe}
             onClose={() => setOpenEditRecipe(false)}
             onSubmit={async (id, name, prep_time, cook_time, servings, instructions) => {
-                await editRecipe(id, name, prep_time, cook_time, servings, instructions);
+                await editRecipe(id, name, prep_time, cook_time, servings, instructions).catch(setError);
                 refreshData();
             }}/>
         <DeleteDialog 
@@ -253,7 +251,7 @@ const Recipe = () => {
             open={openDeleteRecipe}
             onClose={() => setOpenDeleteRecipe(false)}
             onSubmit={async () => {
-                await deleteRecipe(id);
+                await deleteRecipe(id).catch(setError);
                 refreshData();
                 navigate("/recipes");
             }}/>

@@ -12,14 +12,15 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { DeleteDialog } from '../util/DeleteDialog';
 import { AddItemDialog } from '../util/AddItemDialog';
 import { addItemToList } from '../../services/groceryListsService';
+import { ErrorAlert } from '../util/ErrorAlert';
 
-const ListItems = ({items, setOpenDelete, setActiveItem, refreshData}) => {
+const ListItems = ({items, setOpenDelete, setActiveItem, refreshData, setError}) => {
 
     return (items.map((i, idx) =>(
 
             <ListItem key={idx} dense>
               <ListItemIcon>
-                <Checkbox checked={i.picked_up === 1} onChange={async (e) => {await setPickedUp(i.id, e.target.checked); refreshData()}} />
+                <Checkbox checked={i.picked_up === 1} onChange={async (e) => {await setPickedUp(i.id, e.target.checked).catch(setError); refreshData()}} />
               </ListItemIcon>
 
               <ListItemText primary={i.name} />
@@ -43,18 +44,20 @@ const GroceryList = () => {
     const [activeItem, setActiveItem] = useState(null);
     const [openDelete, setOpenDelete] = useState(false);
     const [openNew, setOpenNew] = useState(false);
+    const [error, setError] = useState(null);
 
     const refreshData = async () => {
-        let res = await getItemsFromList(id);
+        let res = await getItemsFromList(id).catch(setError);
         setItems(res || []);
     };
 
     useEffect(() => {
-        refreshData().catch((e) => alert(e));
+        refreshData();
     }, []);
 
     return (
         <div>
+            <ErrorAlert error={error} />
             <h1>Grocery List</h1>
             <Button onClick={() => setOpenNew(true)}>Add Item</Button>
             {categories.map((c, idx) => (
@@ -68,17 +71,18 @@ const GroceryList = () => {
                 </div>
             ))}
         <AddItemDialog
+        setError={setError}
         title="Add a new item to the list"
         open={openNew}
         onClose={() => setOpenNew(false)}
         onSubmit={async (item_id, quantity, unit) => {
-            await addItemToList(id, item_id, quantity, unit);
+            await addItemToList(id, item_id, quantity, unit).catch(setError);
             refreshData();
         }} />
         <DeleteDialog getName={() => activeItem !== null ? activeItem.name : ""}
                       open={openDelete}
                       onClose={() => {setOpenDelete(false)}}
-                      onSubmit={async () => {await deleteItemFromList(activeItem.id); refreshData()}}/>
+                      onSubmit={async () => {await deleteItemFromList(activeItem.id).catch(setError); refreshData()}}/>
         </div>
     )
 }

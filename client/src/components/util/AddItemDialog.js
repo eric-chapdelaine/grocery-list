@@ -9,14 +9,14 @@ import { Autocomplete } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getItems } from '../../services/itemsService';
 
-const AddItemDialog = ({title, open, onClose, onSubmit}) => {
+const AddItemDialog = ({title, open, onClose, onSubmit, setError}) => {
 
     const [itemId, setItemId] = useState(null);
     const [items, setItems] = useState([]); 
 
     useEffect(() => {
         const getData = async () => {
-            setItems(await getItems());
+            setItems(await getItems().catch(setError));
         };
 
          getData();

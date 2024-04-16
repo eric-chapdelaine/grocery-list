@@ -21,7 +21,7 @@ const BasicDatePicker = ({date, setDate}) => {
     )
 }
 
-const NewPlanDialog = ({title, open, onClose, onSubmit}) => {
+const NewPlanDialog = ({title, open, onClose, onSubmit, setError}) => {
 
 
     const [recipes, setRecipes] = useState([]);
@@ -34,7 +34,7 @@ const NewPlanDialog = ({title, open, onClose, onSubmit}) => {
             setRecipes(await getRecipes());
         }
 
-        getData();
+        getData().catch(setError);
     }, []);
 
     return (
