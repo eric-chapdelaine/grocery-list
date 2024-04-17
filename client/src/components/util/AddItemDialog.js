@@ -64,7 +64,7 @@ const AddItemDialog = ({title, open, onClose, onSubmit, setError}) => {
                 name="quantity"
                 label="Quantity"
                 type="number"
-                step="any"
+                inputProps={{step: "any"}}
                 fullWidth />
             <DialogContentText>
                 Enter the unit of the item

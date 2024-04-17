@@ -1,11 +1,6 @@
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-// import Container from '@mui/material/Container';
-// import {useState} from "react";
-// import { GroceryListPage } from './GroceryListPage';
-// import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {Link} from 'react-router-dom';
-// import { GroceryListPage } from './GroceryListPage';
 
 const HomePage = () => {
   const Pages = {

@@ -35,8 +35,8 @@ const EditItemDialog = ({open, onClose, onSubmit}) => {
                 id="quantity"
                 name="quantity"
                 label="Quantity"
-                type="double"
-                step="any"
+                type="number"
+                inputProps={{step: 'any'}}
                 fullWidth />
             <DialogContentText>
                 Enter the new unit:
@@ -132,7 +132,9 @@ const Recipe = () => {
         <h3>
             Instructions:
         </h3>
+        <div style={{"white-space": "pre-line"}}>
         {recipe.instructions}
+        </div>
         {/* Item Dialogs */}
         <AddItemDialog
         setError={setError}

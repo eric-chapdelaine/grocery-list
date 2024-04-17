@@ -471,26 +471,38 @@ INSERT INTO grocery_list (name) VALUES ("Roche Bros");
 INSERT INTO grocery_list (name) VALUES ("Target");
 
 INSERT INTO item (name, category) VALUES ("Scallion", "Produce");
+INSERT INTO item (name, category) VALUES ("Garlic", "Produce");
+INSERT INTO item (name, category) VALUES ("Ginger", "Produce");
 INSERT INTO item (name, category) VALUES ("Cucumber", "Produce");
+INSERT INTO item (name, category) VALUES ("Bell Pepper", "Produce");
+INSERT INTO item (name, category) VALUES ("Canned Corn", "Other");
 INSERT INTO item (name, category) VALUES ("Ground Beef", "Meat");
 INSERT INTO item (name, category) VALUES ("Rice", "Other");
 INSERT INTO item (name, category) VALUES ("Taco Seasoning", "Other");
 
 
 INSERT INTO recipe  (name, instructions, prep_time_minutes, cook_time_minutes, servings)
-VALUES ("Bibimbap Bowl", "Sample instructions for bibimbap", 30, 20, 4);
+VALUES ("Bibimbap Bowl", 
+'1. Saute vegetables
+2. Cook ground beef with minced garlic and minched ginger
+3. Cook rice according to package
+4. Assemble and enjoy', 30, 20, 4);
 
 INSERT INTO recipe  (name, instructions, prep_time_minutes, cook_time_minutes, servings)
-VALUES ("Taco Bowl", "Sample instructions for taco bowl", 20, 10, 4);
+VALUES ("Taco Bowl", 
+'1. Chop vegetables
+2. Cook ground beef with taco seasoning
+3. Cook rice according to package
+4. Assemble and enjoy', 20, 10, 4);
 
 INSERT INTO grocery_list_includes_item (grocery_list, item, picked_up, quantity, unit, recipe)
 VALUES (1, 1, false, 1, "Bunch", 1);
 
 INSERT INTO grocery_list_includes_item (grocery_list, item, picked_up, quantity, unit, recipe)
-VALUES (1, 3, true, 1, "lb", 1);
+VALUES (1, 7, true, 1, "lb", 1);
 
 INSERT INTO grocery_list_includes_item (grocery_list, item, picked_up, quantity, unit, recipe)
-VALUES (1, 3, true, 1, "lb", 2);
+VALUES (1, 7, true, 1, "lb", 2);
 
 INSERT INTO planned_meal (date, meal_type, recipe)
 VALUES ("2024-04-12", "Dinner", 1);
@@ -502,17 +514,31 @@ INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
 VALUES (1, 1, 1, "Bunch");
 
 INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
-VALUES (1, 3, 1, "lb");
+VALUES (1, 2, 2, "cloves");
 
 INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
-VALUES (1, 4, 1.5, "cups");
+VALUES (1, 3, 2, "thumbs");
 
 INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
-VALUES (2, 3, 1, "lb");
+VALUES (1, 8, 1.5, "cups");
 
 INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
-VALUES (2, 5, 1, "lb");
+VALUES (1, 7, 1, "lb");
 
 INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
-VALUES (2, 4, 1.5, "cups");
+VALUES (2, 4, 2, "units");
 
+INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
+VALUES (2, 5, 2, "units");
+
+INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
+VALUES (2, 6, 1, "can");
+
+INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
+VALUES (2, 7, 1, "lb");
+
+INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
+VALUES (2, 8, 1.5, "cups");
+
+INSERT INTO recipe_made_up_of_item (recipe, item, quantity, unit)
+VALUES (2, 9, 1, "packet");

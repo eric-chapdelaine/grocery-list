@@ -17,7 +17,7 @@ const NewRecipeDialog = ({title, recipe, open, onClose, onSubmit}) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
                 const formJson = Object.fromEntries(formData.entries());
-                onSubmit(formJson.name, formJson.instructions, formJson.prep_time_minutes, formJson.cook_time_minutes, formJson.servings);
+                onSubmit(formJson.name, formJson.prep_time_minutes, formJson.cook_time_minutes, formJson.servings, formJson.instructions);
                 onClose();
             }
         }}>
