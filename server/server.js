@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const PORT = 8000;
-const CLIENT_URL = "http://localhost:3000";
-const LOCAL_URL = "http://192.168.1.157:3000";
+const CLIENT_URL = "http://grocery-list-frontend";
+const LOCAL_URL = "http://localhost:3000";
 
 
 app.use(
