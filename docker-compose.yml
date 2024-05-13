@@ -1,11 +1,40 @@
 version: '3.3'
 services:
-  grocery-list-backend:
+  mysql:
+    image: mysql
+    container_name: mysql
+    networks:
+      - test
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+  backend:
     build: ./server
+    container_name: grocery-backend
+    networks:
+      - test
     ports: 
       - "8000:8000"
+    depends_on:
+      - mysql
 
-  grocery-list-frontend:
+  frontend:
     build: ./client
+    container_name: grocery-frontend
+    networks:
+      - test
     ports: 
-      - "3000:80"
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  proxy:
+    build: ./proxy
+    container_name: grocery-proxy
+    ports:
+      - "80:80"
+    networks:
+      - test
+
+networks:
+  test:

@@ -2,15 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const PORT = 8000;
-const CLIENT_URL = "http://grocery-list-frontend";
-const LOCAL_URL = "http://localhost:3000";
-
-
-app.use(
-  cors({
-    credentials: true,
-    origin: [CLIENT_URL, LOCAL_URL]
-  }));
+// const CLIENT_URL = "http://grocery-frontend:3000";
+// const LOCAL_URL = "http://localhost:3000";
+// 
+// 
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: [CLIENT_URL, LOCAL_URL]
+//   }));
 
 app.use(express.json());
 
